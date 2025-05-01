@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 lat = 1.3521
 long = 103.8198
-api_key = "ve907d2bc4c8bc43a1b7b161620251803"  # Replace with your WeatherAPI key
+api_key = "ve907d2bc4c8bc43a1b7b161620251823"  # Replace with your WeatherAPI key
 
 weather_map = {
     'Clouds': 1,
