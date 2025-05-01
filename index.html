@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="../resources/templates/main_css.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+
+    <style>
+      /* Set a background image by replacing the URL below */
+      body {
+        background: url('../static/background2.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover;
+      }
+      
+      .jumbotron {
+        background: linear-gradient(to bottom, rgba(236, 234, 234, 0.6) 0%,rgba(236, 234, 234, 0.6) 100%)
+      }
+
+      .navbar-header {
+        float: left;
+        padding: 15px;
+        text-align: center;
+        width: 100%;
+      }
+      .navbar-brand {float:none;}
+
+      #block1 {
+        /* margin: 10px 20px; */
+        padding: 20px;
+        width: 50%;
+        float: left;
+      }
+
+      #block2 {
+        /* margin: 10px 20px; */
+        padding: 20px;
+        width: 50%;
+        float: right;
+      }
+
+      .vl {
+        border-left: 6px solid green;
+        height: 500px;
+        position: absolute;
+        left: 50%;
+        margin-left: -3px;
+        top: 0;
+      }
+
+      .card-block {
+        min-height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <title>Traffic Congestion Prediction Website</title>
+    <!-- <h1>Hello, world!</h1> -->
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top mb-5 shadow" style="text-align:center;">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#"><b>Traffic Congestion Prediction</b></a>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div id = "app" class="container">
+      <div class="jumbotron border-0 shadow my-5">
+        <!-- <div class="card-body p-5"> -->
+          <h2 style="text-align:center;">Current Traffic Congestion</h2>
+          <!-- <div style="height: 700px"> -->
+
+            <div class="card v1">
+              <div class="card-body">
+                <div id="block1">
+                  <h3>${current.date}</h3>
+                  <h4>Last updated: ${current.time}</h4>
+                </div>
+                <div id="block2">
+                  <template v-if="current.colour == 'success'">
+                    <h3 style = "color:green">${current.result}</h3>
+                    <img src="../static/green.png">
+                  </template>
+                  <template v-else-if="current.colour == 'warning'">
+                    <h3 style = "color:yellow">${current.result}</h3>
+                    <img src = "../static/yellow.png">
+                  </template>
+                  <template v-else>
+                    <h3 style = "color:red">${current.result}</h3>
+                    <img src="../static/red.png">
+                  </template>
+                </div>
+              </div>
+            </div>
+
+            <br>
+            <h2 style="text-align:center;">Hourly Forecast on Traffic Congestion</h2>
+
+            <div class="container-fluid">
+              <div class="row flex-nowrap overflow-auto">
+                  <div class="col-3" v-for="hour in hourly">
+
+                    <template v-if="hour.colour == 'success'">
+                      <div class="card card-block text-center">
+                        <img class="card-img-top" src="../static/green.png" alt="Card image cap">
+                        <div class="card-body">
+                          <h5 class="card-title">${hour.result}</h5>
+                          <p class="card-text">${hour.time}</p>
+                        </div>
+                      </div>
+                    </template>
+
+                    <template v-else-if="hour.colour == 'warning'">
+                      <div class="card card-block text-center">
+                        <img class="card-img-top" src="../static/yellow.png" alt="Card image cap">
+                        <div class="card-body">
+                          <h5 class="card-title">${hour.result}</h5>
+                          <p class="card-text">${hour.time}</p>
+                        </div>
+                      </div>
+                    </template>
+
+                    <template v-else>
+                      <div class="card card-block text-center">
+                        <img class="card-img-top" src="../static/red.png" style = "height:fit-content" alt="Card image cap">
+                        <div class="card-body">
+                          <h5 class="card-title">${hour.result}</h5>
+                          <p class="card-text">${hour.time}</p>
+                        </div>
+                      </div>
+                    </template>
+
+                  </div>
+              </div>
+            </div>
+
+            <br>
+            <h2 style="text-align:center;">Daily Forecast on Traffic Congestion</h2>
+
+            <div class = "container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Day/Date</th>
+                  <th scope="col">Traffic Congestion</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-for="forecast in daily">
+                  <template v-if="forecast.colour == 'success'">
+                    <tr class="table-success">
+                      <td>${forecast.date}</td>
+                      <td>${forecast.result}</td>
+                    </tr>
+                  </template>
+                  <template v-else-if="current.colour == 'warning'">
+                    <tr class="table-warning">
+                      <td>${forecast.date}</td>
+                      <td>${forecast.result}</td>
+                    </tr>
+                  </template>
+                  <template v-else>
+                    <tr class="table-danger">
+                      <td>${forecast.date}</td>
+                      <td>${forecast.result}</td>
+                    </tr>
+                  </template>
+                </template>
+              </tbody>
+            </table>
+            </div>
+
+            <!-- Reload Button -->
+            <div class="col-md-12 text-center">
+              <button @click="getPredictions" type="button" class="btn btn-success" style="font-weight: bold;">Reload Forecast</button>
+            </div>
+          </div>
+          
+        <!-- </div> -->
+      </div>
+    </div>
+
+
+    <script>
+      var prediction_url = "http://127.0.0.1:5003/predict";
+
+      var app = new Vue({
+        el: "#app",
+        delimiters: ['${', '}'],
+        data: {
+          current: {},
+          hourly: [],
+          daily: [],
+          d: 'table-danger',
+          w: 'table-warning',
+          s: 'table-success'
+        },
+        methods: {
+          getPredictions: function () {
+              // on Vue instance created, load the book list
+              const response =
+                  fetch(prediction_url)
+                      .then(response => response.json())
+                      .then(data => {
+                          // console.log(response);
+                          console.log(data.data);
+                          if (data.code === 404) {
+                              // no book in db
+                              this.message = data.message;
+                          } else {
+                            this.daily = data.data.daily;
+                            this.current = data.data.current;
+                            this.hourly = data.data.hourly;
+                            console.log(this.daily);
+                          }
+                      })
+                      .catch(error => {
+                          // Errors when calling the service; such as network error, 
+                          // service offline, etc
+                          console.log(this.message + error);
+
+                      });
+
+          }
+        },
+        created: function () {
+            // on Vue instance created, load predictions
+            this.getPredictions();
+        }
+      })
+
+    </script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="vue.js"></script> 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  </body>
+</html>
